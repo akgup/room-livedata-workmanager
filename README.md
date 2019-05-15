@@ -9,7 +9,7 @@
 Navigate https://webhook.site and copy url like below <br />
 https://webhook.site/fa4888ac-ad91-4d08-b3fd-b05ffe306e1e <br />
 
-Configure api resource with above <br />
+Configure api resource with above in RemoteNoteEndpoint file<br />
 
 ```
     @Headers("Content-Type: application/json")
