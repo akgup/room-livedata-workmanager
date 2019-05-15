@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+
+
+project.ext {
+    supportLibraryVersion = "26.1.0"
+    androidArchVersion = "1.0.0-rc1"
+    daggerVersion = "2.11"
+    butterKnifeVersion = "8.7.0"
+    rxJavaVersion = "2.1.0"
+    rxAndroidVersion = "2.0.1"
+    timberVersion = "4.5.1"
+    priorityJobQueueVersion = "2.0.1"
+    playServicesVersion = "11.4.2"
+    retrofitVersion = "2.1.0"
+    okHttpVersion = "3.4.1"
+    rxRelayVersion = "2.0.0"
+    rxLintVersion = "1.6"
+    versionsWork = "2.0.1"
+}
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.buzzybrains.mvvmarchitecture"
+        minSdkVersion 22
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    def room_version = "2.1.0-alpha07"
+    def lifecycle_version = "2.0.0"
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+
+
+    //room
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$project.retrofitVersion"
+
+    // GSON Converter
+    implementation "com.squareup.retrofit2:converter-gson:$project.retrofitVersion"
+
+    // OkHttp Logging Interceptor
+    implementation "com.squareup.okhttp3:okhttp:$project.okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$project.okHttpVersion"
+
+    // Timber
+    implementation "com.jakewharton.timber:timber:$project.timberVersion"
+
+    //work manager
+    implementation "androidx.work:work-runtime:$project.versionsWork"
+}
