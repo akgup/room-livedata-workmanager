@@ -7,9 +7,9 @@ import com.buzzybrains.mvvmarchitecture.asynctask.DeleteNoteAsyncTask;
 import com.buzzybrains.mvvmarchitecture.asynctask.InsertNoteAsyncTask;
 import com.buzzybrains.mvvmarchitecture.asynctask.UpdateNoteAsyncTask;
 import com.buzzybrains.mvvmarchitecture.model.Note;
-import com.buzzybrains.mvvmarchitecture.serviceimpl.RemoteSyncServiceImpl;
+import com.buzzybrains.mvvmarchitecture.serviceimpl.SyncServiceImpl;
 import com.buzzybrains.mvvmarchitecture.services.INoteService;
-import com.buzzybrains.mvvmarchitecture.services.RemoteSyncService;
+import com.buzzybrains.mvvmarchitecture.services.ISyncService;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class NoteRepository implements INoteService {
 
     private LiveData<List<Note>> allNotes;
 
-    private RemoteSyncService remoteSyncService;
+    private ISyncService remoteSyncService;
 
 
     public NoteRepository(Application application) {
@@ -31,8 +31,7 @@ public class NoteRepository implements INoteService {
 
         allNotes = noteDao.getAllNotes();
 
-
-        remoteSyncService = new RemoteSyncServiceImpl(this);
+        remoteSyncService = new SyncServiceImpl(this);
 
     }
 

@@ -4,19 +4,19 @@ import android.os.AsyncTask;
 
 import com.buzzybrains.mvvmarchitecture.data.NoteDao;
 import com.buzzybrains.mvvmarchitecture.model.Note;
-import com.buzzybrains.mvvmarchitecture.serviceimpl.RemoteSyncServiceImpl;
+import com.buzzybrains.mvvmarchitecture.serviceimpl.SyncServiceImpl;
 import com.buzzybrains.mvvmarchitecture.services.INoteService;
-import com.buzzybrains.mvvmarchitecture.services.RemoteSyncService;
+import com.buzzybrains.mvvmarchitecture.services.ISyncService;
 
 public class UpdateNoteAsyncTask extends AsyncTask<Note, Void, Note> {
 
-    static RemoteSyncService remoteSyncService;
+    static ISyncService remoteSyncService;
     private NoteDao noteDao;
 
     public UpdateNoteAsyncTask(NoteDao noteDao, INoteService service) {
         this.noteDao = noteDao;
 
-        remoteSyncService = new RemoteSyncServiceImpl(service);
+        remoteSyncService = new SyncServiceImpl(service);
     }
 
 

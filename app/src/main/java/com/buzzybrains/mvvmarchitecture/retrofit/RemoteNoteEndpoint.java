@@ -1,4 +1,4 @@
-package com.buzzybrains.mvvmarchitecture.networking;
+package com.buzzybrains.mvvmarchitecture.retrofit;
 
 import com.buzzybrains.mvvmarchitecture.model.Note;
 

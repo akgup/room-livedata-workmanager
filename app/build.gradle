@@ -56,8 +56,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-
-
     //room
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
@@ -71,9 +69,6 @@ dependencies {
     // OkHttp Logging Interceptor
     implementation "com.squareup.okhttp3:okhttp:$project.okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$project.okHttpVersion"
-
-    // Timber
-    implementation "com.jakewharton.timber:timber:$project.timberVersion"
 
     //work manager
     implementation "androidx.work:work-runtime:$project.versionsWork"

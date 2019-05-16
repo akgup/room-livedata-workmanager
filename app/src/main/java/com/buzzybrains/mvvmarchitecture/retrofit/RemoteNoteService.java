@@ -1,4 +1,4 @@
-package com.buzzybrains.mvvmarchitecture.networking;
+package com.buzzybrains.mvvmarchitecture.retrofit;
 
 
 import com.buzzybrains.mvvmarchitecture.util.ModelConstants;
@@ -13,8 +13,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RemoteNoteService {
-
-    private static RemoteNoteService instance;
 
     private static Retrofit retrofit;
 
@@ -42,11 +40,5 @@ public class RemoteNoteService {
         return retrofit;
     }
 
-    public static synchronized RemoteNoteService getInstance() {
-        if (instance == null) {
-            instance = new RemoteNoteService();
-        }
-        return instance;
-    }
 
 }

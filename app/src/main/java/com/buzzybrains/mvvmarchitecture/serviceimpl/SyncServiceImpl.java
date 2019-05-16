@@ -1,21 +1,21 @@
 package com.buzzybrains.mvvmarchitecture.serviceimpl;
 
 import com.buzzybrains.mvvmarchitecture.model.Note;
-import com.buzzybrains.mvvmarchitecture.networking.RemoteNoteEndpoint;
-import com.buzzybrains.mvvmarchitecture.networking.RemoteNoteService;
+import com.buzzybrains.mvvmarchitecture.retrofit.RemoteNoteEndpoint;
+import com.buzzybrains.mvvmarchitecture.retrofit.RemoteNoteService;
 import com.buzzybrains.mvvmarchitecture.services.INoteService;
-import com.buzzybrains.mvvmarchitecture.services.RemoteSyncService;
+import com.buzzybrains.mvvmarchitecture.services.ISyncService;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RemoteSyncServiceImpl implements RemoteSyncService {
+public class SyncServiceImpl implements ISyncService {
 
     INoteService mService;
 
-    public RemoteSyncServiceImpl(INoteService noteService) {
+    public SyncServiceImpl(INoteService noteService) {
         this.mService = noteService;
     }
 
