@@ -11,6 +11,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
@@ -18,11 +19,11 @@ import androidx.work.WorkManager;
 
 public class NoteViewModel extends AndroidViewModel {
 
+    public MutableLiveData<Boolean> isNoteClicked = new MutableLiveData<>();
+    public MutableLiveData<Note> noteMutableLiveData = new MutableLiveData<>();
     private NoteRepository noteRepository;
-
+    ;
     private LiveData<List<Note>> allNotes;
-
-
     private WorkManager mWorkManager;
 
     public NoteViewModel(@NonNull Application application) {

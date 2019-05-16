@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
 
     private static final DiffUtil.ItemCallback<Note> DIFF_CALLBACK = new DiffUtil.ItemCallback<Note>() {
+
         @Override
         public boolean areItemsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
-
 
             return oldItem.getId() == newItem.getId();
         }
@@ -31,6 +31,8 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
                     (oldItem.getPriority() == newItem.getPriority()) && (oldItem.isSync() == newItem.isSync());
         }
     };
+
+
     private OnCardClickListener listener;
 
     public NoteAdapter() {
@@ -88,7 +90,6 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewPriority = itemView.findViewById(R.id.text_view_priority);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

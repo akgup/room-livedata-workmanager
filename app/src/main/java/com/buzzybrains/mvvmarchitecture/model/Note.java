@@ -20,6 +20,9 @@ public class Note implements Serializable {
 
     private boolean isSync;
 
+    public Note() {
+    }
+
     public Note(String title, String description, int priority, boolean isSync) {
         this.title = title;
         this.description = description;

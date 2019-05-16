@@ -1,145 +1,111 @@
 package com.buzzybrains.mvvmarchitecture.activity;
 
 
-import android.content.Intent;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.buzzybrains.mvvmarchitecture.R;
-import com.buzzybrains.mvvmarchitecture.adapter.NoteAdapter;
-import com.buzzybrains.mvvmarchitecture.model.Note;
+import com.buzzybrains.mvvmarchitecture.fragment.AddEditNoteFragment;
+import com.buzzybrains.mvvmarchitecture.fragment.ListNoteFragment;
 import com.buzzybrains.mvvmarchitecture.viewmodel.NoteViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int ADD_NOTE_REQUEST = 1;
-    public static final int EDIT_NOTE_REQUEST = 2;
     private NoteViewModel noteViewModel;
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager inputManager = (InputMethodManager) activity
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        // check if no view has focus:
+        View currentFocusedView = activity.getCurrentFocus();
+        if (currentFocusedView != null) {
+            inputManager.hideSoftInputFromWindow(currentFocusedView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(mTopToolbar);
+
+        final TextView titleToolbar = (TextView) mTopToolbar.findViewById(R.id.toolbar_title);
+
+        final ImageView closeIcon = (ImageView) mTopToolbar.findViewById(R.id.close_icon);
+
+
+        //show default list note fragment
+        getSupportFragmentManager().beginTransaction().add(R.id.layout_fragment, new ListNoteFragment()).commit();
+
         FloatingActionButton buttonAddNote = findViewById(R.id.button_add_note);
+
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
-                startActivityForResult(intent, ADD_NOTE_REQUEST);
+
+                navigateAddEditFragment();
+
             }
         });
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        final NoteAdapter noteAdapter = new NoteAdapter();
-
-        recyclerView.setAdapter(noteAdapter);
-
 
         noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
 
         noteViewModel.startSync();
 
-        noteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
+        noteViewModel.isNoteClicked.observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(List<Note> notes) {
+            public void onChanged(Boolean isNoteClicked) {
 
-                Log.i("akshay", notes.toString());
+                if (isNoteClicked) {
+                    navigateAddEditFragment();
+                }
 
-                noteAdapter.submitList(notes);
 
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.Callback() {
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
-            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-                return makeMovementFlags(0, swipeFlags);
-            }
+            public void onBackStackChanged() {
 
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
+                int count = getSupportFragmentManager().getBackStackEntryCount();
 
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (count == 0) {
+                    titleToolbar.setText("Note List");
+                    closeIcon.setVisibility(View.INVISIBLE);
+                }
 
-                noteViewModel.delete(noteAdapter.getNoteAtPosition(viewHolder.getAdapterPosition()));
+                if (count > 0) {
 
-                Toast.makeText(MainActivity.this, "Note deleted!!", Toast.LENGTH_SHORT).show();
-            }
-        }).attachToRecyclerView(recyclerView);
+                    String topOnStack = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
 
 
-        noteAdapter.setonItemClickListener(new NoteAdapter.OnCardClickListener() {
-            @Override
-            public void onItemClicked(Note note) {
+                }
 
-                Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
-                intent.putExtra(AddEditNoteActivity.EXTRA_NOTE, note);
-                startActivityForResult(intent, EDIT_NOTE_REQUEST);
 
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ADD_NOTE_REQUEST && resultCode == RESULT_OK) {
-
-            String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
-            int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1);
-            String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-            Note note = new Note(title, description, priority, false);
-
-            noteViewModel.insert(note);
-
-
-            Toast.makeText(this, "Note Saved Successfully!", Toast.LENGTH_SHORT).show();
-        } else if (requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK) {
-
-            String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
-            int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1);
-            String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
-            long id = data.getLongExtra(AddEditNoteActivity.EXTRA_ID, -1);
-
-            if (id == -1) {
-                Toast.makeText(this, "Note can't be updated!", Toast.LENGTH_SHORT).show();
-            } else {
-                Note note = new Note(title, description, priority, false);
-                note.setId(id);
-
-                noteViewModel.update(note);
-
-                Toast.makeText(this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
-            }
-
-        }
     }
 
     @Override
@@ -161,5 +127,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        hideKeyboard(this);
+
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count > 0) {
+
+            getSupportFragmentManager().popBackStack();
+
+
+        }
+
+    }
+
+    private void navigateAddEditFragment() {
+
+        //navigate to add edit note fragment
+        getSupportFragmentManager().beginTransaction().add(R.id.layout_fragment, new AddEditNoteFragment()).addToBackStack("AddEditNoteFragment").commit();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        //This method is called when the up button is pressed. Just the pop back stack.
+        getSupportFragmentManager().popBackStack();
+        return true;
+    }
 }
