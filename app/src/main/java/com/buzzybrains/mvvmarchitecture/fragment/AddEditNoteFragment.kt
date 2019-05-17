@@ -17,6 +17,7 @@ class AddEditNoteFragment : Fragment() {
 
     private var noteViewModel: NoteViewModel? = null
     var note: Note? = null
+
     var isEdit: Boolean = false
 
     var toolbar: Toolbar? = null
@@ -50,7 +51,7 @@ class AddEditNoteFragment : Fragment() {
         number_picker_priority.setMinValue(1)
         number_picker_priority.setMaxValue(10)
 
-        isEdit = noteViewModel?.isNoteClicked!!.value!!
+        isEdit = noteViewModel?.isNoteClicked?.value!!
 
         if (isEdit) {
 

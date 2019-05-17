@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.buzzybrains.mvvmarchitecture.R
-
 import com.buzzybrains.mvvmarchitecture.adapter.NoteAdapter
+
 import com.buzzybrains.mvvmarchitecture.model.Note
 import com.buzzybrains.mvvmarchitecture.viewmodel.NoteViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -54,7 +54,7 @@ class ListNoteFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.setAdapter(noteAdapter)
 
-        noteViewModel?.getAllNotes()?.observe(this, Observer<List<Note>> { notes ->
+        noteViewModel?.allNotes?.observe(this, Observer<List<Note>> { notes ->
             Log.i("akshay", "on changed is called " + notes.toString())
 
             noteAdapter.submitList(notes)

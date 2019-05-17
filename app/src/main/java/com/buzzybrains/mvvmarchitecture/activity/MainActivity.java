@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         noteViewModel.startSync();
 
-        noteViewModel.isNoteClicked.observe(this, new Observer<Boolean>() {
+        noteViewModel.isNoteClicked().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isNoteClicked) {
 
